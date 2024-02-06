@@ -23,12 +23,14 @@ class UserProfileView(ViewSet):
     authentication_classes=[authentication.TokenAuthentication]
     permission_classes=[permissions.IsAuthenticated]
     def update(self,request,*args,**kwargs):
+        id=int(kwargs.get("pk"))
         user_obj=request.user.profile
-        if request.user.id == int(kwargs.get("pk")):
+        if request.user.profile.id == id:
             serializer=UserProfileSerializer(data=request.data,instance=user_obj)
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(user=request.user)
                 return Response(data=serializer.data)
             else:
                 return Response(data=serializer.errors)
-        raise serializers.ValidationError("permission denied")      
+        else:
+            raise serializers.ValidationError("permission denied")      

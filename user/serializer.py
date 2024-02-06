@@ -13,7 +13,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    user=serializers.StringRelatedField()
     class Meta:
         model=UserProfile
         fields="__all__"
-        read_only_fields=["id"]
+        read_only_fields=["id","user"]
